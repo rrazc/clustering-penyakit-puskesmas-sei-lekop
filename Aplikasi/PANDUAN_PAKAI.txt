@@ -1,0 +1,35 @@
+PANDUAN MEMBUKA APLIKASI
+Project Penambangan Data — Puskesmas Sei Lekop
+
+1. Ekstrak seluruh folder Aplikasi dari paket ZIP ke satu folder.
+2. Buka file JALANKAN_DASHBOARD.html dengan klik dua kali (paling mudah).
+   Atau buka index.html jika ingin menjalankan dari kumpulan kode sumber.
+   Gunakan Chrome, Firefox, atau Edge.
+3. Pilih skenario 11 wilayah (utama) atau 9 wilayah (pembanding).
+4. Pilih jumlah cluster k dari 2 sampai 5. Tabel, indikator, peta cluster, dan grafik akan berubah otomatis.
+5. Klik Unduh hasil agregat (CSV) jika ingin menyimpan pembagian cluster.
+6. Untuk mengulang model utama: pilih 11 wilayah dan 2 cluster.
+
+Aplikasi bekerja sepenuhnya offline, tidak memerlukan Python, database, atau internet.
+Tidak ada permintaan unggah data pasien. Jangan mempublikasikan data kesehatan tingkat kunjungan.
+
+FILE UTAMA
+- index.html            antarmuka
+- app.js                kontrol dan visualisasi
+- model.js              Ward hierarchical clustering + skor silhouette
+- data_model.js         proporsi kategori diagnosis (agregat) untuk 9 dan 11 wilayah
+- Matriks_Proporsi_9.csv / Matriks_Proporsi_11.csv : audit fitur yang dipakai
+
+PETA CLUSTER
+Satu titik = satu wilayah; wilayah yang mirip dilingkari menjadi satu cluster. Sumbu adalah komponen utama (PCA), yaitu ringkasan seluruh rasio penyakit, bukan satu penyakit tertentu. Lingkaran putih = wilayah dengan kurang dari 50 kunjungan klinis.
+
+BATASAN
+Hasilnya eksploratif, bukan penaksiran prevalensi ataupun bukti risiko klinis suatu wilayah.
+Status "sampel terbatas" berarti catatan klinis di bawah 50; jumlah kecil tidak ditampilkan satuan.
+Rata-rata profil cluster menghitung setiap wilayah berbobot sama.
+
+JIKA TIDAK MUNCUL TAMPILAN
+Pastikan keempat file index.html, app.js, model.js, data_model.js berada dalam folder yang sama.
+Buka ulang index.html memakai browser terbaru yang mendukung JavaScript.
+
+Validasi Python opsional: python Uji_Model_Python.py (memerlukan numpy pandas scikit-learn).

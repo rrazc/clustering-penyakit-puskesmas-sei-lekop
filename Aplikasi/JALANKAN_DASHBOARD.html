@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Sei Lekop | Dashboard Clustering Diagnosis</title>
+<style>
+:root{--ink:#163b37;--muted:#647a78;--teal:#0b8172;--navy:#213f61;--sky:#eaf4f0;--paper:#f6f8f7;--line:#d9e5e1}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:#182c29;font:15px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}.shell{max-width:1160px;margin:0 auto;padding:34px 24px 60px}.eyebrow{font-size:12px;color:#a4cbc3;letter-spacing:.12em;text-transform:uppercase;font-weight:750}.hero{background:#123e36;color:white;padding:32px 36px;border-radius:18px;box-shadow:0 12px 34px rgba(13,57,48,.11)}.hero h1{font-size:clamp(24px,4vw,37px);line-height:1.16;margin:9px 0 12px;font-weight:720;letter-spacing:-.035em}.hero p{margin:0;max-width:790px;color:#c7d9d4;font-size:14px}.hero-tag{display:inline-block;margin-top:18px;border:1px solid #4d8b7b;border-radius:999px;padding:5px 11px;color:#d4f0e7;font-size:12px}.toolbar{display:flex;align-items:end;gap:16px;flex-wrap:wrap;margin:22px 0}.field{display:flex;flex-direction:column;gap:7px;min-width:190px}.field label{font-size:12px;color:var(--muted);font-weight:700}select{border:1px solid var(--line);padding:12px 14px;border-radius:9px;min-width:190px;background:white;color:var(--ink);font-weight:600;font-size:14px}.button{border:1px solid var(--teal);background:white;color:var(--teal);padding:12px 16px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:700}.button:hover{background:#e7f2ef}.grid{display:grid;gap:15px}.metrics{grid-template-columns:repeat(4,1fr)}.metric,.panel{background:white;border:1px solid var(--line);border-radius:12px;padding:21px}.metric .label{font-size:12px;color:#657b76;font-weight:700}.metric .val{font-size:27px;line-height:1.25;color:var(--ink);font-weight:760;margin-top:5px}.metric small{font-size:12px;color:#70847f}.main-grid{grid-template-columns:1fr 1fr;margin-top:18px}.panel h2{font-size:18px;line-height:1.3;margin:0 0 6px;color:var(--ink)}.sub{font-size:12px;color:var(--muted);margin:0 0 16px}.tags{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tag{border-radius:100px;background:#edf6f2;color:#236d62;padding:4px 9px;font-size:11px;font-weight:700}.tag.alt{background:#e8eef7;color:#385779}.member{padding:10px 0;border-bottom:1px solid #edf2f0;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:8px}.member:last-child{border:0}.clusterName{font-size:15px;font-weight:750;margin:0;color:#1d4b43}.small{color:#7a8e88;font-size:11px}.c1{color:#007f70}.c2{color:#365e90}.warn{background:#fff9e9;border:1px solid #e9d9a4;border-radius:10px;padding:14px 17px;margin:18px 0;font-size:13px;color:#605333}.legend{display:flex;gap:18px;color:#617873;font-size:12px;margin:7px 0 18px}.dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:6px;background:#048a75}.dot.blue{background:#456ba1}.bars{display:flex;flex-direction:column;gap:11px}.bar-row{display:grid;grid-template-columns:138px 1fr 54px 1fr 54px;align-items:center;gap:8px;font-size:12px}.track{background:#eef3f0;border-radius:999px;height:12px;overflow:hidden}.fill{height:100%;background:#048a75;border-radius:999px}.fill.blue{background:#456ba1}.num{text-align:right;font-variant-numeric:tabular-nums;color:#667772}.full{margin-top:18px}.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px;min-width:570px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid #e9eeec}th{background:#f3f7f5;color:#496d65;font-size:12px}td:last-child,th:last-child{text-align:right}tbody tr:hover{background:#f5f9f7}.footer{margin-top:18px;font-size:12px;color:#71827e}.state{padding:5px 8px;border-radius:6px;background:#edf5f1;color:#267064;font-weight:700;font-size:11px}.state.warning{background:#fff2dd;color:#835e1c}.footnotes{color:#556963;font-size:12px;margin-top:15px}
+@media(max-width:850px){.metrics{grid-template-columns:repeat(2,1fr)}.main-grid{grid-template-columns:1fr}.bar-row{grid-template-columns:96px 1fr 42px 1fr 42px}.shell{padding:17px 12px 40px}.hero{padding:25px}}
+@media(max-width:430px){.metrics{grid-template-columns:1fr 1fr}.metric{padding:15px}.metric .val{font-size:22px}.bar-row{grid-template-columns:75px 1fr 37px 1fr 37px;gap:4px;font-size:11px}}
+.mapwrap{width:100%;overflow-x:auto}#map{width:100%;height:auto;min-width:560px;display:block}.maplegend{display:flex;gap:16px;flex-wrap:wrap;color:#617873;font-size:12px;margin:2px 0 10px}.maplegend span{display:inline-flex;align-items:center;gap:6px}.mapnote{font-size:12px;color:#556963;margin-top:10px}
+</style></head><body>
+<main class="shell">
+<header class="hero"><div class="eyebrow">Project Penambangan Data · Puskesmas Sei Lekop</div><h1>Pengelompokan Karakteristik<br>Diagnosis Antarwilayah</h1><p>Dashboard eksploratif untuk melihat kemiripan komposisi kategori diagnosis ICD-10 berdasarkan wilayah asal pasien. Hasil dihitung dari data agregat tahun 2025 menggunakan Ward Hierarchical Clustering.</p><span class="hero-tag">Analisis agregat · tanpa nama, alamat, atau koordinat pasien</span></header>
+<section class="toolbar" aria-label="Pengaturan model">
+<div class="field"><label for="scenario">Skenario wilayah</label><select id="scenario"><option value="11">11 wilayah (analisis utama)</option><option value="9">9 wilayah (uji pembanding)</option></select></div>
+<div class="field"><label for="k">Jumlah cluster (k)</label><select id="k"><option value="2">2 cluster (model utama)</option><option value="3">3 cluster</option><option value="4">4 cluster</option><option value="5">5 cluster</option></select></div>
+<button id="download" class="button" type="button">Unduh hasil agregat (CSV)</button>
+</section>
+<section class="grid metrics" aria-label="Indikator model"><div class="metric"><div class="label">Wilayah dianalisis</div><div class="val" id="m-regions">9</div><small>Unit: kelurahan/desa asal</small></div><div class="metric"><div class="label">Jumlah cluster</div><div class="val" id="m-clusters">2</div><small>Ward + Hellinger</small></div><div class="metric"><div class="label">Silhouette</div><div class="val" id="m-score">0,4033</div><small>Skor internal pemisahan cluster</small></div><div class="metric"><div class="label">Cluster tunggal</div><div class="val" id="m-single">0</div><small>Kelompok berisi satu wilayah (pada data utama)</small></div></section>
+<div id="warning" class="warn" role="status"></div>
+<section class="panel full" id="map-panel"><h2>Peta cluster wilayah</h2><p class="sub">Satu titik = satu wilayah. Wilayah dengan komposisi diagnosis yang mirip berdekatan dan dilingkari menjadi satu cluster.</p><div id="map-legend" class="maplegend"></div><div class="mapwrap"><svg id="map" viewBox="0 0 760 500" role="img" aria-label="Peta cluster wilayah berdasarkan komponen utama"></svg></div><p class="mapnote" id="map-note"></p></section>
+<div class="grid main-grid"><section class="panel"><h2>Anggota tiap cluster</h2><p class="sub">Wilayah dikelompokkan menurut komposisi kode diagnosis, bukan jarak geografis.</p><div id="cluster-members"></div></section><section class="panel"><h2>Profil kategori diagnosis</h2><p class="sub">Rata-rata proporsi antarwilayah dalam cluster; tidak menunjukkan prevalensi penduduk.</p><div class="legend"><span><i class="dot"></i>Cluster 1</span><span><i class="dot blue"></i>Cluster 2</span></div><div id="profile-bars" class="bars"></div><p id="profile-note" class="footnotes"></p></section></div>
+<section class="panel full"><h2>Keanggotaan wilayah</h2><p class="sub">Nomor cluster adalah label algoritma. Bukan peringkat risiko kesehatan wilayah.</p><div class="scroll"><table><thead><tr><th>Wilayah asal pasien</th><th>Hasil</th><th>Dominan 1</th><th>Dominan 2</th><th>Keterangan</th></tr></thead><tbody id="table-body"></tbody></table></div></section>
+<section class="footer">Sumber: matriks proporsi diagnosis tahun 2025 yang disusun dari data kunjungan Puskesmas Sei Lekop. ICD-10 2019 digunakan sebagai acuan interpretasi kategori. Data tidak mewakili seluruh warga tiap wilayah; penggunaan untuk perencanaan pelayanan memerlukan validasi pihak Puskesmas. Sistem ini berjalan lokal dan tidak mengirim data ke internet.</section>
+</main><script>
+window.SEI_DATA = {"9":{"names":["SUNGAI LEKOP","GUNUNG LENGKUAS","GUNUNG KIJANG","KIJANG KOTA","BATU SEMBILAN","PINANG KENCANA","TOAPAYA SELATAN","SUNGAI ENAM","TANJUNG AYUN SAKTI"],"limited":[false,false,false,false,false,true,true,true,true],"features":["J","K","I","E","R","M","L","S_T","A_B","H0_59","LAINNYA"],"values":[[0.2115239532252,0.1482459449264,0.15513013957,0.0790267823463,0.0707280271596,0.0655413051679,0.0499811391928,0.0382874387024,0.0349867974349,0.037250094304,0.1092983779706],[0.200988177166,0.1512263984472,0.1508734780307,0.08540674078,0.0621139932945,0.0594670901712,0.055408505382,0.0439385918475,0.0359978824775,0.0407623080995,0.1138168343039],[0.2379310344828,0.1701149425287,0.1022988505747,0.064367816092,0.0597701149425,0.0827586206897,0.0574712643678,0.0655172413793,0.0367816091954,0.0195402298851,0.1034482758621],[0.1735537190083,0.1859504132231,0.0867768595041,0.0578512396694,0.103305785124,0.0578512396694,0.0454545454545,0.1198347107438,0.0330578512397,0.0371900826446,0.099173553719],[0.1830985915493,0.169014084507,0.1408450704225,0.056338028169,0.0704225352113,0.0140845070423,0.0985915492958,0.0985915492958,0.0281690140845,0.0422535211268,0.0985915492958],[0.2241379310345,0.1896551724138,0.1034482758621,0.0689655172414,0.0689655172414,0.0,0.0172413793103,0.1034482758621,0.051724137931,0.0172413793103,0.1551724137931],[0.4285714285714,0.0571428571429,0.0285714285714,0.0285714285714,0.1428571428571,0.0285714285714,0.2,0.0285714285714,0.0571428571429,0.0,0.0],[0.3170731707317,0.1219512195122,0.1951219512195,0.0243902439024,0.0487804878049,0.0975609756098,0.0243902439024,0.0,0.1219512195122,0.0487804878049,0.0],[0.1777777777778,0.0444444444444,0.2,0.1333333333333,0.0,0.1555555555556,0.0666666666667,0.0666666666667,0.0888888888889,0.0,0.0666666666667]]},"11":{"names":["SUNGAI LEKOP","GUNUNG LENGKUAS","GUNUNG KIJANG","KIJANG KOTA","BATU SEMBILAN","PINANG KENCANA","TOAPAYA SELATAN","SUNGAI ENAM","TANJUNG AYUN SAKTI","KAWAL","SEI JANG"],"limited":[false,false,false,false,false,true,true,true,true,true,true],"features":["J","K","I","E","R","M","L","S_T","A_B","H0_59","LAINNYA"],"values":[[0.2115239532252,0.1482459449264,0.15513013957,0.0790267823463,0.0707280271596,0.0655413051679,0.0499811391928,0.0382874387024,0.0349867974349,0.037250094304,0.1092983779706],[0.200988177166,0.1512263984472,0.1508734780307,0.08540674078,0.0621139932945,0.0594670901712,0.055408505382,0.0439385918475,0.0359978824775,0.0407623080995,0.1138168343039],[0.2379310344828,0.1701149425287,0.1022988505747,0.064367816092,0.0597701149425,0.0827586206897,0.0574712643678,0.0655172413793,0.0367816091954,0.0195402298851,0.1034482758621],[0.1735537190083,0.1859504132231,0.0867768595041,0.0578512396694,0.103305785124,0.0578512396694,0.0454545454545,0.1198347107438,0.0330578512397,0.0371900826446,0.099173553719],[0.1830985915493,0.169014084507,0.1408450704225,0.056338028169,0.0704225352113,0.0140845070423,0.0985915492958,0.0985915492958,0.0281690140845,0.0422535211268,0.0985915492958],[0.2241379310345,0.1896551724138,0.1034482758621,0.0689655172414,0.0689655172414,0.0,0.0172413793103,0.1034482758621,0.051724137931,0.0172413793103,0.1551724137931],[0.4285714285714,0.0571428571429,0.0285714285714,0.0285714285714,0.1428571428571,0.0285714285714,0.2,0.0285714285714,0.0571428571429,0.0,0.0],[0.3170731707317,0.1219512195122,0.1951219512195,0.0243902439024,0.0487804878049,0.0975609756098,0.0243902439024,0.0,0.1219512195122,0.0487804878049,0.0],[0.1777777777778,0.0444444444444,0.2,0.1333333333333,0.0,0.1555555555556,0.0666666666667,0.0666666666667,0.0888888888889,0.0,0.0666666666667],[0.1851851851852,0.1111111111111,0.2222222222222,0.0740740740741,0.037037037037,0.0740740740741,0.037037037037,0.1481481481481,0.0,0.0,0.1111111111111],[0.1935483870968,0.258064516129,0.0322580645161,0.0,0.1612903225806,0.0645161290323,0.0967741935484,0.0645161290323,0.0322580645161,0.0,0.0967741935484]]}};
+
+</script><script>
+/* Reproduksi Ward hierarchical clustering pada sqrt(proporsi kategori ICD).
+ * Seluruh perhitungan dilakukan lokal di perangkat. Tidak ada koneksi jaringan.
+ */
+(function (root) {
+  'use strict';
+  function euclid(a,b){let s=0; for(let i=0;i<a.length;i++){const d=a[i]-b[i];s+=d*d;}return Math.sqrt(s);}
+  function ward(dataset,k){
+    if(!dataset || !Array.isArray(dataset.values))throw new Error('Dataset tidak lengkap');
+    const p=dataset.values;const n=p.length;
+    if(k<2||k>=n)throw new Error('Jumlah cluster tidak valid');
+    const X=p.map(row=>row.map(v=>Math.sqrt(v)));
+    let groups=X.map((v,i)=>({ids:[i],n:1,mean:v.slice()}));
+    while(groups.length>k){
+      let best=Infinity, a=-1, b=-1;
+      for(let i=0;i<groups.length;i++)for(let j=i+1;j<groups.length;j++){
+        const A=groups[i],B=groups[j]; let sq=0;
+        for(let q=0;q<A.mean.length;q++)sq+=(A.mean[q]-B.mean[q])**2;
+        const cost=A.n*B.n/(A.n+B.n)*sq;
+        if(cost<best-1e-13){best=cost;a=i;b=j;}
+      }
+      const A=groups[a],B=groups[b],total=A.n+B.n;
+      const merged={ids:A.ids.concat(B.ids),n:total,mean:A.mean.map((v,z)=>(v*A.n+B.mean[z]*B.n)/total)};
+      groups.splice(b,1);groups.splice(a,1);groups.push(merged);
+    }
+    groups.sort((a,b)=>{
+      const aHas0=a.ids.includes(0),bHas0=b.ids.includes(0);
+      if(aHas0!==bHas0)return aHas0?-1:1;
+      return Math.min(...a.ids)-Math.min(...b.ids);
+    });
+    const labels=Array(n).fill(-1);
+    groups.forEach((g,index)=>g.ids.forEach(i=>labels[i]=index));
+    return {labels,sizes:groups.map(g=>g.n),groups:groups.map(g=>g.ids),X,silhouette:silhouette(X,labels),n};
+  }
+  function silhouette(X,lab){
+    const n=X.length, distances=X.map((a,i)=>X.map((b,j)=>i===j?0:euclid(a,b)));
+    const uniq=[...new Set(lab)]; let score=0;
+    for(let i=0;i<n;i++){
+      const own=lab.map((z,j)=>z===lab[i]&&i!==j?j:-1).filter(j=>j>=0);
+      if(own.length===0)continue; // singleton -> 0, sama seperti sklearn
+      const a=own.reduce((s,j)=>s+distances[i][j],0)/own.length;
+      let b=Infinity;
+      for(const lbl of uniq){if(lbl===lab[i])continue;
+        const other=lab.map((z,j)=>z===lbl?j:-1).filter(j=>j>=0);
+        const m=other.reduce((s,j)=>s+distances[i][j],0)/other.length;
+        b=Math.min(b,m);
+      }
+      score+=(b-a)/Math.max(a,b);
+    }
+    return score/n;
+  }
+  function summaries(dataset,result){
+    return result.groups.map((ids,group)=>({cluster:'C'+(group+1),count:ids.length,features:dataset.features.map((f,j)=>({feature:f,value:ids.reduce((s,i)=>s+dataset.values[i][j],0)/ids.length})).sort((a,b)=>b.value-a.value),names:ids.map(i=>dataset.names[i])}));
+  }
+  /* PCA (komponen utama) pada X = sqrt(proporsi), hanya untuk menggambar peta 2D.
+   * Pengelompokan Ward tetap dihitung pada seluruh fitur, bukan pada 2 sumbu ini. */
+  function jacobi(A){
+    const n=A.length;A=A.map(r=>r.slice());
+    const V=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+    for(let sweep=0;sweep<100;sweep++){
+      let off=0;for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)off+=A[i][j]*A[i][j];
+      if(off<1e-22)break;
+      for(let p=0;p<n-1;p++)for(let q=p+1;q<n;q++){
+        if(Math.abs(A[p][q])<1e-30)continue;
+        const theta=(A[q][q]-A[p][p])/(2*A[p][q]);
+        const t=Math.sign(theta||1)/(Math.abs(theta)+Math.sqrt(theta*theta+1));
+        const c=1/Math.sqrt(t*t+1),s=t*c;
+        for(let k=0;k<n;k++){const akp=A[k][p],akq=A[k][q];A[k][p]=c*akp-s*akq;A[k][q]=s*akp+c*akq;}
+        for(let k=0;k<n;k++){const apk=A[p][k],aqk=A[q][k];A[p][k]=c*apk-s*aqk;A[q][k]=s*apk+c*aqk;}
+        for(let k=0;k<n;k++){const vkp=V[k][p],vkq=V[k][q];V[k][p]=c*vkp-s*vkq;V[k][q]=s*vkp+c*vkq;}
+      }
+    }
+    return {values:A.map((r,i)=>r[i]),vectors:V};
+  }
+  function pca(X){
+    const n=X.length,d=X[0].length;
+    const mean=Array.from({length:d},(_,j)=>X.reduce((s,r)=>s+r[j],0)/n);
+    const Z=X.map(r=>r.map((v,j)=>v-mean[j]));
+    const C=Array.from({length:d},(_,a)=>Array.from({length:d},(_,b)=>Z.reduce((s,r)=>s+r[a]*r[b],0)/(n-1)));
+    const e=jacobi(C),order=e.values.map((v,i)=>i).sort((a,b)=>e.values[b]-e.values[a]);
+    const total=e.values.reduce((s,v)=>s+v,0);
+    const axes=order.slice(0,2).map(i=>{
+      const vec=e.vectors.map(r=>r[i]);
+      const big=vec.reduce((m,v)=>Math.abs(v)>Math.abs(m)?v:m,0);
+      return big<0?vec.map(v=>-v):vec; // tanda sumbu dibuat deterministik
+    });
+    return {coords:Z.map(r=>axes.map(v=>r.reduce((s,x,j)=>s+x*v[j],0))),explained:order.slice(0,2).map(i=>e.values[i]/total)};
+  }
+  const api={ward,summaries,pca};
+  if(typeof module!=='undefined' && module.exports)module.exports=api;
+  root.SeiModel=api;
+})(typeof window==='undefined'?globalThis:window);
+
+</script><script>
+(function(){
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const label={J:'Pernapasan (J)',K:'Pencernaan (K)',I:'Sirkulasi (I)',E:'Endokrin (E)',R:'Gejala/tanda (R)',M:'Otot-tulang (M)',L:'Kulit (L)',S_T:'Cedera/keracunan (S–T)',A_B:'Infeksi (A–B)',H0_59:'Mata (H00–H59)',LAINNYA:'Kategori lain'};
+ const fmt=x=>(100*x).toFixed(1).replace('.',',')+'%';
+ const fixed=x=>x.toFixed(4).replace('.',',');
+ let current=null;
+ function el(tag,txt,cls){const e=document.createElement(tag);if(txt!==undefined)e.textContent=txt;if(cls)e.className=cls;return e;}
+ function render(){
+  const scenario=$('scenario').value,k=Number($('k').value);
+  const data=window.SEI_DATA[scenario],result=window.SeiModel.ward(data,k);current={data,result,scenario,k};
+  $('m-regions').textContent=result.n;$('m-clusters').textContent=k;$('m-score').textContent=fixed(result.silhouette);
+  const singles=result.sizes.filter(z=>z===1).length;$('m-single').textContent=singles;
+  const warning=singles?`PERHATIAN: ${singles} cluster hanya memiliki satu wilayah. Model ini kurang tepat untuk langsung digunakan sebagai dasar program kesehatan.`:
+      'HASIL EKSPLORATIF: Tidak ada cluster tunggal pada pengaturan ini. Namun, bootstrap 200 kali pada model utama (11 wilayah, k=2) menunjukkan 15,5% ulangan menghasilkan cluster tunggal (pembanding 9 wilayah: 35,0%); profil dari wilayah dengan sedikit kunjungan belum stabil.';
+  $('warning').textContent=warning;
+  const member=$('cluster-members');member.replaceChildren();
+  const profiles=window.SeiModel.summaries(data,result);
+  for(const cluster of profiles){
+    const section=el('div');section.style.marginBottom='18px';
+    section.appendChild(el('h3',cluster.cluster+' · '+cluster.count+' wilayah','clusterName'));
+    const badge=el('div',cluster.features.slice(0,2).map(f=>label[f.feature]).join(' · '),'tags');section.appendChild(badge);
+    cluster.names.forEach(name=>{const r=el('div',undefined,'member');r.appendChild(el('span',title(name)));r.appendChild(el('span','Wilayah','small'));section.appendChild(r);});
+    member.appendChild(section);
+  }
+  const features=data.features;
+  const meanAll=features.map((f,j)=>({f,v:data.values.reduce((s,row)=>s+row[j],0)/data.values.length})).sort((a,b)=>b.v-a.v).slice(0,7);
+  const bars=$('profile-bars');bars.replaceChildren();
+  for(const obj of meanAll){
+    const i=features.indexOf(obj.f), c1=profiles[0].features.find(z=>z.feature===obj.f).value;
+    const c2=profiles[1]?profiles[1].features.find(z=>z.feature===obj.f).value:0;
+    const r=el('div',undefined,'bar-row');r.appendChild(el('span',label[obj.f]));
+    for(const [val,blue] of [[c1,false],[c2,true]]){const track=el('div',undefined,'track');const fill=el('div',undefined,blue?'fill blue':'fill');fill.style.width=(Math.min(100,val*200))+'%';track.appendChild(fill);r.appendChild(track);r.appendChild(el('span',fmt(val),'num'));}
+    bars.appendChild(r);
+  }
+  $('profile-note').textContent=k>2?'Grafik ini hanya menampilkan Cluster 1 dan 2; tabel di bawah tetap memuat semua kelompok. Pilih k=2 untuk membaca profil model utama.':'Panjang batang diskalakan konsisten (50% = lebar penuh). Persentase dihitung dari rerata proporsi wilayah, bukan jumlah pasien unik.';
+  drawMap(data,result,k);
+  const tbody=$('table-body');tbody.replaceChildren();
+  data.names.forEach((name,i)=>{
+    const sorted=data.values[i].map((v,j)=>({f:features[j],v})).sort((a,b)=>b.v-a.v),tr=el('tr');
+    tr.appendChild(el('td',title(name)));tr.appendChild(el('td','C'+(result.labels[i]+1)));
+    tr.appendChild(el('td',label[sorted[0].f]+' · '+fmt(sorted[0].v)));
+    tr.appendChild(el('td',label[sorted[1].f]+' · '+fmt(sorted[1].v)));
+    const low=data.limited[i];tr.appendChild(el('td',low?'Sampel terbatas':'Sampel cukup',low?'state warning':'state'));
+    tbody.appendChild(tr);
+  });
+ }
+
+ const PAL=['#0b8172','#365e90','#b5651d','#8a5a9e','#6b7b78'];
+ const NS='http:'+'//www.w3.org/2000/svg'; // namespace SVG, bukan koneksi jaringan
+ function sv(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!==undefined)e.textContent=txt;return e;}
+ function hull(pts){
+  const p=pts.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);if(p.length<3)return p;
+  const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);
+  const lo=[];for(const q of p){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop();lo.push(q);}
+  const up=[];for(let i=p.length-1;i>=0;i--){const q=p[i];while(up.length>=2&&cr(up[up.length-2],up[up.length-1],q)<=0)up.pop();up.push(q);}
+  lo.pop();up.pop();return lo.concat(up);
+ }
+ function niceStep(range){const raw=range/7,mag=Math.pow(10,Math.floor(Math.log10(raw)));for(const m of [1,2,2.5,5,10]){if(m*mag>=raw)return m*mag;}return 10*mag;}
+ const fmtAx=v=>(Math.abs(v)<1e-9?0:v).toFixed(2).replace(/0$/,'').replace(/\.0$/,'').replace('-','\u2212');
+ const SHAPE={J:'circle',K:'square',I:'cross'},EXTRA=['diamond','triangle','plus'];
+ function marker(svg,shape,x,y,col,size){
+  const r=size||7;let g;
+  if(shape==='square'){g=sv('rect',{x:x-r,y:y-r,width:2*r,height:2*r,fill:col,stroke:'#fff','stroke-width':1.5});}
+  else if(shape==='cross'){const d='M'+(x-r)+' '+(y-r)+' L'+(x+r)+' '+(y+r)+' M'+(x-r)+' '+(y+r)+' L'+(x+r)+' '+(y-r);g=sv('g',{});g.appendChild(sv('path',{d,stroke:'#fff','stroke-width':7,'stroke-linecap':'round'}));g.appendChild(sv('path',{d,stroke:col,'stroke-width':3.6,'stroke-linecap':'round'}));}
+  else if(shape==='diamond'){g=sv('path',{d:'M'+x+' '+(y-r-1)+' L'+(x+r+1)+' '+y+' L'+x+' '+(y+r+1)+' L'+(x-r-1)+' '+y+' Z',fill:col,stroke:'#fff','stroke-width':1.5});}
+  else if(shape==='triangle'){g=sv('path',{d:'M'+x+' '+(y-r-1)+' L'+(x+r+1)+' '+(y+r)+' L'+(x-r-1)+' '+(y+r)+' Z',fill:col,stroke:'#fff','stroke-width':1.5});}
+  else if(shape==='plus'){const d='M'+(x-r)+' '+y+' L'+(x+r)+' '+y+' M'+x+' '+(y-r)+' L'+x+' '+(y+r);g=sv('g',{});g.appendChild(sv('path',{d,stroke:'#fff','stroke-width':7,'stroke-linecap':'round'}));g.appendChild(sv('path',{d,stroke:col,'stroke-width':3.6,'stroke-linecap':'round'}));}
+  else{g=sv('circle',{cx:x,cy:y,r:r,fill:col,stroke:'#fff','stroke-width':1.5});}
+  svg.appendChild(g);return g;
+ }
+ function drawMap(data,result,k){
+  const svg=$('map');svg.replaceChildren();
+  const pc=window.SeiModel.pca(result.X),W=760,H=500,L=66,R=26,T=44,B=56;
+  const xs=pc.coords.map(c=>c[0]),ys=pc.coords.map(c=>c[1]);
+  const pad=(lo,hi)=>{const s=(hi-lo)*0.12||0.05;return [lo-s,hi+s];};
+  const [x0,x1]=pad(Math.min(...xs),Math.max(...xs)),[y0,y1]=pad(Math.min(...ys),Math.max(...ys));
+  const sx=x=>L+(x-x0)/(x1-x0)*(W-L-R),sy=y=>H-B-(y-y0)/(y1-y0)*(H-T-B);
+  const P=pc.coords.map(c=>[sx(c[0]),sy(c[1])]);
+  svg.appendChild(sv('text',{x:(L+W-R)/2,y:22,'text-anchor':'middle','font-size':15,fill:'#182c29'},'Peta cluster '+data.names.length+' wilayah (hasil Ward, posisi titik dengan PCA)'));
+  const gx=niceStep(x1-x0),gy=niceStep(y1-y0);
+  for(let v=Math.ceil(x0/gx)*gx;v<=x1+1e-9;v+=gx){svg.appendChild(sv('line',{x1:sx(v),x2:sx(v),y1:T,y2:H-B,stroke:'#e9eeec'}));svg.appendChild(sv('line',{x1:sx(v),x2:sx(v),y1:H-B,y2:H-B+5,stroke:'#182c29'}));svg.appendChild(sv('text',{x:sx(v),y:H-B+19,'text-anchor':'middle','font-size':11,fill:'#182c29'},fmtAx(v)));}
+  for(let v=Math.ceil(y0/gy)*gy;v<=y1+1e-9;v+=gy){svg.appendChild(sv('line',{x1:L,x2:W-R,y1:sy(v),y2:sy(v),stroke:'#e9eeec'}));svg.appendChild(sv('line',{x1:L-5,x2:L,y1:sy(v),y2:sy(v),stroke:'#182c29'}));svg.appendChild(sv('text',{x:L-9,y:sy(v)+4,'text-anchor':'end','font-size':11,fill:'#182c29'},fmtAx(v)));}
+  svg.appendChild(sv('line',{x1:L,x2:L,y1:T,y2:H-B,stroke:'#182c29'}));svg.appendChild(sv('line',{x1:L,x2:W-R,y1:H-B,y2:H-B,stroke:'#182c29'}));
+  svg.appendChild(sv('text',{x:(L+W-R)/2,y:H-12,'text-anchor':'middle','font-size':12,fill:'#182c29'},'Sumbu 1 (menjelaskan '+Math.round(pc.explained[0]*100)+'% variasi)'));
+  svg.appendChild(sv('text',{x:16,y:(T+H-B)/2,'text-anchor':'middle','font-size':12,fill:'#182c29',transform:'rotate(-90 16 '+((T+H-B)/2)+')'},'Sumbu 2 (menjelaskan '+Math.round(pc.explained[1]*100)+'% variasi)'));
+  result.groups.forEach((ids,g)=>{
+   const col=PAL[g%PAL.length],pts=ids.map(i=>P[i]);
+   if(pts.length===1){svg.appendChild(sv('circle',{cx:pts[0][0],cy:pts[0][1],r:22,fill:col,'fill-opacity':.12,stroke:col,'stroke-opacity':.5,'stroke-width':1.5,'stroke-dasharray':'5 3'}));return;}
+   const h=hull(pts),d='M'+h.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' L')+(h.length>2?' Z':'');
+   svg.appendChild(sv('path',{d,fill:col,'fill-opacity':.13,stroke:col,'stroke-opacity':.17,'stroke-width':28,'stroke-linejoin':'round','stroke-linecap':'round'}));
+   svg.appendChild(sv('path',{d,fill:col,'fill-opacity':.08,stroke:col,'stroke-opacity':.85,'stroke-width':1.8,'stroke-linejoin':'round'}));
+  });
+  // bentuk titik = kategori diagnosis dominan
+  const dom=data.values.map(row=>data.features[row.indexOf(Math.max(...row))]),shapeOf={},used=[];
+  let ex=0;dom.forEach(f=>{if(!shapeOf[f]){shapeOf[f]=SHAPE[f]||EXTRA[(ex++)%EXTRA.length];used.push(f);}});
+  const lab=result.labels;
+  P.forEach((q,i)=>marker(svg,shapeOf[dom[i]],q[0],q[1],PAL[lab[i]%PAL.length]));
+  const boxes=P.map(q=>({x:q[0]-10,y:q[1]-10,w:20,h:20})),inter=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
+  P.map((q,i)=>i).sort((a,b)=>P[a][1]-P[b][1]).forEach(i=>{
+   const t=title(data.names[i]),w=t.length*5.8+4,h=13,q=P[i];
+   let cands=[[12,-8],[12,16],[-w-12,-8],[-w-12,16],[-w/2,-16],[-w/2,26],[14,-24],[14,32],[-w-14,-24],[-w-14,32]];
+   const near=P.findIndex((o,j)=>j!==i&&Math.hypot(o[0]-q[0],o[1]-q[1])<20);
+   if(near>=0){cands=(q[1]<=P[near][1])?[[-w/2,-18],[12,-14],[-w-12,-14]].concat(cands):[[12,22],[-w-12,22],[-w/2,30]].concat(cands);}
+   let best=null,bs=Infinity;
+   for(const [dx,dy] of cands){const b={x:q[0]+dx,y:q[1]+dy-h+2,w,h};let s=0;
+    if(b.x<L||b.x+b.w>W-R||b.y<T||b.y+b.h>H-B)s+=1000;boxes.forEach(o=>{if(inter(b,o))s+=100;});if(s<bs){bs=s;best=[dx,dy,b];}}
+   boxes.push(best[2]);svg.appendChild(sv('text',{x:q[0]+best[0],y:q[1]+best[1],'font-size':11,fill:'#26433e'},t));
+  });
+  const lg=$('map-legend');lg.replaceChildren();
+  const icon=(shape,col)=>{const s=sv('svg',{width:16,height:16,viewBox:'0 0 16 16'});marker(s,shape,8,8,col,5);return s;};
+  result.groups.forEach((ids,g)=>{const s=el('span');s.appendChild(icon('circle',PAL[g%PAL.length]));s.appendChild(document.createTextNode('Cluster '+(g+1)+' ('+ids.length+' wilayah)'));lg.appendChild(s);});
+  used.forEach(f=>{const s=el('span');s.appendChild(icon(shapeOf[f],'#808080'));s.appendChild(document.createTextNode('Penyakit dominan: '+label[f]));lg.appendChild(s);});
+  $('map-note').textContent='Satu titik = satu wilayah; warna dan lingkaran = cluster hasil Ward; bentuk titik = kategori diagnosis dominan wilayah. Sumbu adalah komponen utama (PCA), yaitu ringkasan seluruh rasio penyakit, bukan satu penyakit tertentu; yang dibaca adalah jarak antartitik. Dua sumbu ini menjelaskan '+Math.round((pc.explained[0]+pc.explained[1])*100)+'% variasi, sehingga jarak bersifat perkiraan. Wilayah bersampel terbatas (< 50 kunjungan klinis) ditandai pada tabel keanggotaan di bawah; hasilnya kecenderungan, bukan pemisahan tegas.';
+ }
+ function title(s){return s.toLowerCase().replace(/\b\p{L}/gu,m=>m.toUpperCase());}
+ function download(){if(!current)return;const {data,result,scenario,k}=current;
+  const clean=s=>'"'+String(s).replace(/"/g,'""')+'"';
+  const csv=['wilayah_asal,cluster,k,proporsi_kategori_dominan_1,proporsi_kategori_dominan_2'].concat(data.names.map((name,i)=>{
+    const sort=data.values[i].map((v,j)=>({f:data.features[j],v})).sort((a,b)=>b.v-a.v);
+    return [clean(name),'C'+(result.labels[i]+1),k,clean(sort[0].f+':'+sort[0].v.toFixed(5)),clean(sort[1].f+':'+sort[1].v.toFixed(5))].join(',');
+  })).join('\n');
+  const url=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`hasil_cluster_${scenario}_wilayah_k${k}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ }
+ $('scenario').addEventListener('change',render);$('k').addEventListener('change',render);$('download').addEventListener('click',download);render();
+})();
+
+</script></body></html>
