@@ -2,7 +2,7 @@
 
 Project mata kuliah **Penambangan Data (INF11121)**, Teknik Informatika, Fakultas Teknik dan Teknologi Kemaritiman, Universitas Maritim Raja Ali Haji, semester ganjil 2026/2027.
 
-**Video presentasi:** `(https://youtu.be/ZDbIlXIsW38)`
+**Video presentasi:** https://youtu.be/ZDbIlXIsW38
 
 ## Tim
 
@@ -115,6 +115,7 @@ Hasil hitung versi JavaScript sudah dicocokkan dengan Python (scikit-learn): del
 │   ├── Pipeline_Pengolahan.py                 mengolah 34 berkas mentah, menghitung bootstrap
 │   ├── Bangun_Model_PerDiagnosis.py           membuat matriks, Ward, K-Means, tabel pengujian
 │   └── Buat_Gambar_Laporan.py                 membuat grafik dari hasil_model.json
+├── hasil_bootstrap.json       Hasil bootstrap 200 ulangan (seed 888), dibaca oleh Bangun_Model_PerDiagnosis.py
 ├── VALIDASI_MODEL.py          Uji kesesuaian matriks, Python, dan JavaScript
 ├── UJI_PCA_PETA.py            Uji koordinat peta dashboard terhadap scikit-learn
 └── README.md
