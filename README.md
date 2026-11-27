@@ -2,7 +2,7 @@
 
 Project mata kuliah **Penambangan Data (INF11121)**, Teknik Informatika, Fakultas Teknik dan Teknologi Kemaritiman, Universitas Maritim Raja Ali Haji, semester ganjil 2026/2027.
 
-**Video presentasi:** `ISI_TAUTAN_YOUTUBE_DI_SINI`
+**Video presentasi:** `(https://youtu.be/ZDbIlXIsW38)`
 
 ## Tim
 
